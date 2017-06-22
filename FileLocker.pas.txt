@@ -1,0 +1,35 @@
+{$R-}
+var
+f:file of char;
+y:longword;
+a,b:char;
+begin
+assign(f,paramstr(1));reset(f);
+if(ioresult=0)and(paramstr(1)<>'')then
+begin{$I-}
+if filesize(f)>25002 then
+begin
+for y:=1 to 12500 do
+begin
+seek(f,y);read(f,a);
+seek(f,25000-y);read(f,b);
+seek(f,y);write(f,b);
+seek(f,25000-y);write(f,a);
+end;
+end
+else
+begin
+for y:=1 to (filesize(f) div 2)-1 do
+begin
+seek(f,y);read(f,a);
+seek(f,filesize(f)-y);read(f,b);
+seek(f,y);write(f,b);
+seek(f,filesize(f)-y);write(f,a);
+end;
+end;
+end
+else
+begin writeln('Fail to access the file !');
+readln;
+end;
+end.
